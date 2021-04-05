@@ -1,9 +1,8 @@
 import { ConfigModule } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserSchema } from './schemas/user.schema';
-import { User } from './shared/user';
-import { UserService } from './shared/user.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+import { UserService } from './services/user.service';
 import { UsersController } from './users.controller';
 
 describe('UsersController', () => {
@@ -15,10 +14,15 @@ describe('UsersController', () => {
         ConfigModule.forRoot({
           envFilePath: '.env.test',
         }),
-        MongooseModule.forRoot(
-          `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.notof.mongodb.net/db?retryWrites=true&w=majority`,
-        ),
-        MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
+        TypeOrmModule.forFeature([User]),
+        TypeOrmModule.forRoot({
+          type: 'mongodb',
+          url: process.env.MONGODB_CONNECTION_STRING,
+          entities: [__dirname + '/**/*.entity{.ts,.js}'],
+          ssl: true,
+          useUnifiedTopology: true,
+          useNewUrlParser: true,
+        }),
       ],
       controllers: [UsersController],
       providers: [UserService],
@@ -34,7 +38,7 @@ describe('UsersController', () => {
         email: 'johndoe@email.com',
         password: '147258369',
       };
-      expect(await controller.create(user)).toHaveProperty('_id');
+      expect(await controller.create(user)).toHaveProperty('id');
     });
   });
 });

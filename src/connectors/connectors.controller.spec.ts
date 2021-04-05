@@ -1,10 +1,9 @@
 import { ConfigModule } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConnectorsController } from './connectors.controller';
-import { ConnectorSchema } from './schemas/connector.schema';
-import { Connector } from './shared/connector';
-import { ConnectorService } from './shared/connector.service';
+import { Connector } from './entities/connector.entity';
+import { ConnectorService } from './services/connector.service';
 
 describe('ConnectorsController', () => {
   let controller: ConnectorsController;
@@ -15,12 +14,15 @@ describe('ConnectorsController', () => {
         ConfigModule.forRoot({
           envFilePath: '.env.test',
         }),
-        MongooseModule.forRoot(
-          `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.notof.mongodb.net/db?retryWrites=true&w=majority`,
-        ),
-        MongooseModule.forFeature([
-          { name: 'Connector', schema: ConnectorSchema },
-        ]),
+        TypeOrmModule.forFeature([Connector]),
+        TypeOrmModule.forRoot({
+          type: 'mongodb',
+          url: process.env.MONGODB_CONNECTION_STRING,
+          entities: [__dirname + '/**/*.entity{.ts,.js}'],
+          ssl: true,
+          useUnifiedTopology: true,
+          useNewUrlParser: true,
+        }),
       ],
       controllers: [ConnectorsController],
       providers: [ConnectorService],
@@ -32,16 +34,16 @@ describe('ConnectorsController', () => {
   describe('create', () => {
     it('should be able to create a new connector', async () => {
       const connector = <Connector>{
-        name: 'GooglE',
-        type: '',
-        privacy: '',
+        name: 'Teste',
+        type: 'REST',
+        privacy: 'PUBLIC',
         baseUrl: '',
         logoUrl: '',
-        category: '',
+        category: 'Category',
         description: '',
         status: false,
       };
-      expect(await controller.create(connector)).toHaveProperty('_id');
+      expect(await controller.create(connector)).toHaveProperty('id');
     });
   });
 });
