@@ -62,4 +62,34 @@ export class ConnectorService {
     await this.connectorRepository.delete(id);
   }
 
+  async findByFilter(query: Partial<Connector>): Promise<Connector[]> {
+    if (!query.name && !query.category && !query.privacy && !query.type) {
+      throw new BadRequestException(
+        'O filtro deve ter pelo menos um desses parâmetros: name, category, type, privacy ',
+      );
+    }
+    const where = {};
+    if (query.name) {
+      Object.assign(where, { name: { $eq: query.name } });
+    }
+    if (query.category) {
+      Object.assign(where, { category: { $eq: query.category } });
+    }
+    if (query.type) {
+      Object.assign(where, { type: { $eq: query.type } });
+    }
+    if (query.privacy) {
+      Object.assign(where, { privacy: { $eq: query.privacy } });
+    }
+    return this.connectorRepository.find(where);
+
+    //return await this.connectorRepository.find({
+    //  where: {
+    //    name: query.name ? { $eq: query.name } : { $ne: null },
+    //    category: query.category ? { $eq: query.category } : { $ne: null },
+    //    type: query.type ? { $eq: query.type } : { $ne: null },
+    //    privacy: query.type ? { $eq: query.privacy } : { $ne: null },
+    //  },
+    //});
+  }
 }

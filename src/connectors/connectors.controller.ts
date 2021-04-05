@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ConnectorService } from './services/connector.service';
@@ -21,6 +22,11 @@ export class ConnectorsController {
   @Get()
   async getAll(): Promise<Connector[]> {
     return await this.connectorService.getAll();
+  }
+
+  @Get('findByFilter')
+  async findByFilter(@Query() query: Partial<Connector>) {
+    return await this.connectorService.findByFilter(query);
   }
 
   @Get(':id')
