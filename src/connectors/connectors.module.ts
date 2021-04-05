@@ -1,12 +1,10 @@
-import { MongooseModule } from '@nestjs/mongoose';
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConnectorService } from './services/connector.service';
 import { ConnectorsController } from './connectors.controller';
-import { ConnectorService } from './shared/connector.service';
-import { ConnectorSchema } from './schemas/connector.schema';
+import { Connector } from './entities/connector.entity';
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: 'Connector', schema: ConnectorSchema }]),
-  ],
+  imports: [TypeOrmModule.forFeature([Connector])],
   controllers: [ConnectorsController],
   providers: [ConnectorService],
 })

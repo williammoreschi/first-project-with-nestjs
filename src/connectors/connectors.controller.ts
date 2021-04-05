@@ -3,14 +3,15 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Post,
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { Connector } from './shared/connector';
-import { ConnectorService } from './shared/connector.service';
+import { ConnectorService } from './services/connector.service';
 import { JwtAuthGuard } from '../auth/shared/jwt-auth.guard';
+import { Connector } from './entities/connector.entity';
 
 @UseGuards(JwtAuthGuard)
 @Controller('connectors')
@@ -28,19 +29,22 @@ export class ConnectorsController {
   }
 
   @Post()
-  async create(@Body() connector: Connector): Promise<Connector> {
+  @HttpCode(201)
+  async create(@Body() connector: Partial<Connector>): Promise<Connector> {
     return await this.connectorService.create(connector);
   }
 
   @Put(':id')
+  @HttpCode(204)
   async update(
     @Param('id') id: string,
-    @Body() connector: Connector,
+    @Body() connector: Partial<Connector>,
   ): Promise<Connector> {
     return await this.connectorService.update(id, connector);
   }
 
   @Delete(':id')
+  @HttpCode(204)
   async delete(@Param('id') id: string): Promise<void> {
     await this.connectorService.delete(id);
   }
