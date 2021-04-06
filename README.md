@@ -14,7 +14,9 @@ $ cd ../../
 ```
 ### Popular o banco com dados fictícios 
 depois de rodar o comando de popular o banco vai ser criado um usuário 
+
 user: admin.devapi.com
+
 pass: 123456
 ```
 # Excluir a base
