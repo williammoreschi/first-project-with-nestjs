@@ -1,12 +1,11 @@
 ### Descrição
 Projeto criado em NestJs.  
 
-### Rodando a aplicação
+### Clonar o Repositório
 ```
-#Clonar o Repositório
 $ git clone https://github.com/williammoreschi/first-project-with-nestjs.git
 ```
-### Criar um container pro banco de dados
+### Criar um container para o banco de dados (mongo)
 ```
 #Depois de clonar o projeto
 $ cd first-project-with-nestjs/infra/docker
