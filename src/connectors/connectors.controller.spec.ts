@@ -1,9 +1,9 @@
-import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConnectorsController } from './connectors.controller';
 import { Connector } from './entities/connector.entity';
 import { ConnectorService } from './services/connector.service';
+import * as ormconfig from '../../ormconfig';
 
 describe('ConnectorsController', () => {
   let controller: ConnectorsController;
@@ -11,18 +11,8 @@ describe('ConnectorsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        ConfigModule.forRoot({
-          envFilePath: '.env.test',
-        }),
+        TypeOrmModule.forRoot(ormconfig),
         TypeOrmModule.forFeature([Connector]),
-        TypeOrmModule.forRoot({
-          type: 'mongodb',
-          url: process.env.MONGODB_CONNECTION_STRING,
-          entities: [__dirname + '/**/*.entity{.ts,.js}'],
-          ssl: true,
-          useUnifiedTopology: true,
-          useNewUrlParser: true,
-        }),
       ],
       controllers: [ConnectorsController],
       providers: [ConnectorService],
