@@ -1,7 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
-import { hash } from 'bcryptjs';
+
+import { generateHash } from '../../utils';
 import { User } from '../entities/user.entity';
 
 @Injectable()
@@ -35,7 +36,7 @@ export class UserService {
       throw new BadRequestException('Já existe um usuário com esse email');
     }
 
-    const hashPassword = await hash(user.password, 8);
+    const hashPassword = await generateHash(user.password);
     user.password = hashPassword;
     return await this.userRepository.save(new User(user));
   }
