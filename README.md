@@ -1,9 +1,15 @@
 ### Descrição
 Projeto criado em NestJs.  
+
+### Rodando a aplicação
+```
+#Clonar o Repositório
+$ git clone https://github.com/williammoreschi/first-project-with-nestjs.git
+```
 ### Criar um container pro banco de dados
 ```
 #Depois de clonar o projeto
-$ cd infra/docker
+$ cd first-project-with-nestjs/infra/docker
 $ docker-compose up -d
 $ cd ../../
 ```
@@ -20,10 +26,24 @@ $ yarn seed:run
 ```
 ### Rodar o projeto
 ```
-$ yarn dev
-
 $ yarn start:dev
+
+# O servidor iniciara na porta:3000
+# acesse <http://localhost:3000>
+
+#ROTAS
+# -- Autenticação -- #
+# GET: http://localhost:3000/auth/login 
+
+# -- CRUD (autenticada)  -- #
+# GET: http://localhost:3000/connectors
+# GET: http://localhost:3000/connectors/xxxxxx
+# GET: http://localhost:3000/connectors/findByFilter?name=Teste&category=Category&type=BD&privacy=PUBLIC
+# POST: http://localhost:3000/connectors
+# PUT: http://localhost:3000/connectors/xxxxxx
+# DELETE: http://localhost:3000/connectors/xxxxxx
 ```
+<img src="https://user-images.githubusercontent.com/2512512/113729668-9a880680-96cd-11eb-9d18-85e1bbf8416a.gif" alt="Demonstração das rotas" width="100%" />
 
 ### Qualidade do código
 ```
